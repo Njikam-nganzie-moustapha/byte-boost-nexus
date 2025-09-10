@@ -9,31 +9,46 @@ const Home = () => {
       <Header />
       
       {/* Hero Section */}
-      <section className="relative min-h-screen flex items-center justify-center particles-bg pt-20">
-        {/* Animated Globe Background */}
-        <div className="absolute inset-0 flex items-center justify-center opacity-20">
-          <div className="globe-container relative w-96 h-96">
-            {/* Globe dots */}
-            {Array.from({ length: 150 }).map((_, i) => {
-              const phi = Math.acos(-1 + (2 * i) / 150);
-              const theta = Math.sqrt(150 * Math.PI) * phi;
+      <section className="relative min-h-screen flex items-center justify-center particles-bg pt-32">
+        {/* Animated Earth Globe Background */}
+        <div className="absolute inset-0 flex items-center justify-center opacity-30">
+          <div className="globe-container relative w-96 h-96 animate-spin" style={{ animationDuration: '30s' }}>
+            {/* Earth-like globe dots with continents pattern */}
+            {Array.from({ length: 200 }).map((_, i) => {
+              const phi = Math.acos(-1 + (2 * i) / 200);
+              const theta = Math.sqrt(200 * Math.PI) * phi;
               const x = Math.cos(theta) * Math.sin(phi);
               const y = Math.sin(theta) * Math.sin(phi);
               const z = Math.cos(phi);
               
+              // Create continent-like patterns
+              const isLand = (
+                (x > -0.3 && x < 0.8 && y > -0.4 && y < 0.6) || // Africa/Europe
+                (x > -0.8 && x < -0.2 && y > -0.2 && y < 0.8) || // Americas  
+                (x > 0.2 && x < 0.9 && y > -0.8 && y < -0.2)    // Asia
+              );
+              
+              const dotColor = isLand ? 'bg-primary' : 'bg-primary/40';
+              const dotSize = isLand ? 'w-1.5 h-1.5' : 'w-1 h-1';
+              
               return (
                 <div
                   key={i}
-                  className="absolute w-1 h-1 bg-primary rounded-full floating-dot"
+                  className={`absolute ${dotColor} ${dotSize} rounded-full floating-dot`}
                   style={{
                     left: `${50 + x * 45}%`,
                     top: `${50 + y * 45}%`,
-                    opacity: z > 0 ? z : 0.1,
-                    animationDelay: `${Math.random() * 3}s`
+                    opacity: z > 0 ? z * 0.8 : 0.2,
+                    animationDelay: `${Math.random() * 5}s`,
+                    transform: `scale(${z > 0 ? 1 : 0.5})`
                   }}
                 />
               );
             })}
+            {/* Globe grid lines */}
+            <div className="absolute inset-0 rounded-full border border-primary/20"></div>
+            <div className="absolute inset-0 rounded-full border border-primary/10" style={{ transform: 'rotateY(45deg)' }}></div>
+            <div className="absolute inset-0 rounded-full border border-primary/10" style={{ transform: 'rotateY(90deg)' }}></div>
           </div>
         </div>
 
@@ -136,18 +151,25 @@ const Home = () => {
                 category: "Marketing"
               }
             ].map((item, index) => (
-              <Card key={index} className="glass-card p-6 card-hover group">
-                <div className="aspect-video bg-gradient-to-br from-primary/20 to-primary/5 rounded-lg mb-4 relative overflow-hidden">
+              <Card key={index} className="glass-card p-0 card-hover group overflow-hidden">
+                <div className="relative aspect-video bg-gradient-to-br from-primary/20 to-primary/5">
                   <div className="absolute inset-0 bg-pattern opacity-10"></div>
                   <Badge className="absolute top-3 left-3 bg-primary/30 text-primary border-primary/50">
                     {item.category}
                   </Badge>
+                  {/* Bande transparente fine en bas - 1/4 de la hauteur */}
+                  <div className="absolute bottom-0 left-0 right-0 h-1/4 bg-gradient-to-t from-background/90 via-background/60 to-transparent backdrop-blur-sm">
+                    <div className="absolute bottom-2 left-3 right-3">
+                      <h3 className="text-lg font-semibold text-primary mb-1 leading-tight">{item.title}</h3>
+                      <p className="text-xs text-muted-foreground leading-tight">{item.desc}</p>
+                    </div>
+                  </div>
                 </div>
-                <h3 className="text-xl font-semibold mb-2 text-primary">{item.title}</h3>
-                <p className="text-muted-foreground mb-4">{item.desc}</p>
-                <Button className="btn-view w-full opacity-0 group-hover:opacity-100 transition-all duration-300">
-                  Voir plus
-                </Button>
+                <div className="p-4">
+                  <Button className="btn-view w-full opacity-0 group-hover:opacity-100 transition-all duration-300">
+                    Voir plus
+                  </Button>
+                </div>
               </Card>
             ))}
           </div>
