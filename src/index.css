@@ -131,8 +131,46 @@
     @apply hover:shadow-lg hover:shadow-primary/25 hover:scale-105;
   }
 
+  /* CV Download button */
+  .btn-cv {
+    @apply bg-secondary/80 text-secondary-foreground border border-primary/30 px-6 py-3 rounded-lg font-medium transition-all duration-300;
+    @apply hover:bg-primary/10 hover:border-primary hover:text-primary;
+  }
+
   /* Glass card effect */
   .glass-card {
     @apply bg-card/80 backdrop-blur-sm border border-border/50 rounded-xl;
+  }
+
+  /* Gradient overlay for sections */
+  .gradient-overlay {
+    @apply bg-gradient-to-b from-transparent via-background/40 to-background/80;
+  }
+
+  /* Globe animation */
+  @keyframes rotate-globe {
+    0% { transform: rotateY(0deg); }
+    100% { transform: rotateY(360deg); }
+  }
+
+  .globe-container {
+    animation: rotate-globe 20s linear infinite;
+    transform-style: preserve-3d;
+  }
+
+  /* Floating dots animation */
+  @keyframes float-dot {
+    0%, 100% { transform: translateY(0px) scale(1); opacity: 0.6; }
+    50% { transform: translateY(-10px) scale(1.1); opacity: 1; }
+  }
+
+  .floating-dot {
+    animation: float-dot 3s ease-in-out infinite;
+  }
+
+  /* View button */
+  .btn-view {
+    @apply bg-primary/20 text-primary border border-primary/50 px-4 py-2 rounded-md text-sm font-medium transition-all duration-300;
+    @apply hover:bg-primary hover:text-primary-foreground hover:scale-105;
   }
 }
