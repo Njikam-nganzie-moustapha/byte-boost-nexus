@@ -1,52 +1,55 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+// src/components/Header.tsx
+import React, { useState } from "react";
+import { Link, NavLink } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
 
-const Header = () => {
+const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const navigation = [
     { name: "Accueil", href: "/" },
-    { name: "Services", href: "/services" },
     { name: "Projets", href: "/projets" },
-    { name: "Contact", href: "/contact" },
+    { name: "Services", href: "/services" },
+    { name: "Galerie", href: "/galerie" }, // points to the gallery page
+    { name: "Contact", href: "/contact" }
   ];
+
+  const navLinkClass = ({ isActive }: { isActive: boolean }) =>
+    `transition-colors duration-200 ${
+      isActive ? "text-primary font-semibold" : "text-foreground hover:text-primary"
+    }`;
 
   return (
     <header className="fixed top-0 w-full bg-background/80 backdrop-blur-md border-b border-border z-50">
       <nav className="container mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
-          <Link 
-            to="/" 
+          <Link
+            to="/"
             className="text-2xl font-bold bg-gradient-to-r from-primary to-primary-glow bg-clip-text text-transparent hover:opacity-80 transition-opacity"
+            aria-label="Accueil - NJIKAM.DEV"
           >
             NJIKAM.DEV
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex space-x-8">
+          <div className="hidden md:flex items-center space-x-8">
             {navigation.map((item) => (
-              <Link
-                key={item.name}
-                to={item.href}
-                className="text-foreground hover:text-primary transition-colors duration-300"
-              >
+              <NavLink key={item.name} to={item.href} className={navLinkClass}>
                 {item.name}
-              </Link>
+              </NavLink>
             ))}
           </div>
 
-          <Button className="hidden md:block btn-hero">
-            Commencer
-          </Button>
+          <Button className="hidden md:block btn-hero">Commencer</Button>
 
           {/* Mobile menu button */}
           <Button
             variant="ghost"
             size="icon"
             className="md:hidden"
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            onClick={() => setIsMenuOpen((s) => !s)}
+            aria-label={isMenuOpen ? "Fermer le menu" : "Ouvrir le menu"}
           >
             {isMenuOpen ? <X /> : <Menu />}
           </Button>
@@ -56,18 +59,23 @@ const Header = () => {
         {isMenuOpen && (
           <div className="md:hidden mt-4 pb-4">
             {navigation.map((item) => (
-              <Link
+              <NavLink
                 key={item.name}
                 to={item.href}
-                className="block py-2 text-foreground hover:text-primary transition-colors duration-300"
+                className={({ isActive }) =>
+                  `block py-2 text-lg w-full ${isActive ? "text-primary font-semibold" : "text-foreground hover:text-primary"}`
+                }
                 onClick={() => setIsMenuOpen(false)}
               >
                 {item.name}
-              </Link>
+              </NavLink>
             ))}
-            <Button className="mt-4 btn-hero w-full">
-              Commencer
-            </Button>
+
+            <div className="mt-4">
+              <Button className="btn-hero w-full" onClick={() => setIsMenuOpen(false)}>
+                Commencer
+              </Button>
+            </div>
           </div>
         )}
       </nav>
