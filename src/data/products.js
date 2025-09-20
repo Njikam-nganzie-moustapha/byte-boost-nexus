@@ -1,9 +1,22 @@
-// src/data/products.ts
+// src/data/products.js
+// Génère automatiquement une liste d'images avec catégorie = nom du dossier
+// Compatible JavaScript pur — pas de "interface", pas de type
 
-export const productsData = Array.from({ length: 2 }, (_, i) => ({
-  id: i + 1,
-  title: `Produit ${i + 1}`,
-  description: "Exemple de description",
-  category: "Test",
-  image: "/assets/graphicimage/1bcedfed2293b1a41f64d05182f5a694.webp", // <-- chemin absolu depuis public/
-}));
+const imageModules = import.meta.glob('/public/assets/**/*.{jpg,jpeg,png,webp,gif,svg}', {
+  eager: true,
+});
+
+export const productsData = Object.keys(imageModules)
+  .map((path, index) => {
+    const parts = path.split('/');
+    const folderName = parts[parts.length - 2]; // ← nom du dossier = catégorie
+    const fileName = parts[parts.length - 1];
+
+    return {
+      id: index + 1,
+      title: fileName.replace(/\.[^/.]+$/, ""), // retire l'extension
+      image: path.replace(/^\/public/, ''),     // chemin public utilisable
+      category: folderName,
+    };
+  })
+  .sort(() => Math.random() - 0.5); // optionnel : ordre aléatoire
