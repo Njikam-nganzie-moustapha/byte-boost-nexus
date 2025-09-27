@@ -10,11 +10,11 @@ export const productsData = Object.keys(imageModules)
   .map((path, index) => {
     const parts = path.split('/');
     const folderName = parts[parts.length - 2]; // ← nom du dossier = catégorie
-    const fileName = parts[parts.length - 1];
+    // const fileName = parts[parts.length - 1];
 
     return {
       id: index + 1,
-      title: fileName.replace(/\.[^/.]+$/, ""), // retire l'extension
+      // title: fileName.replace(/\.[^/.]+$/, ""), // retire l'extension
       image: path.replace(/^\/public/, ''),     // chemin public utilisable
       category: folderName,
     };
