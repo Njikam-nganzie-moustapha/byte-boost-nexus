@@ -1,6 +1,6 @@
 services:
   web:
-    image: node:22
+    image: node:20-alpine
     working_dir: /app
     volumes:
       - ./:/app
